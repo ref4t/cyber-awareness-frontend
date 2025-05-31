@@ -1,12 +1,94 @@
-# React + Vite
+# Cybersecurity Awareness Website - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the **Vite + React** frontend for the Cybersecurity Awareness Website. It provides interactive UI components for quizzes, feedback, user authentication, and educational content.
 
-Currently, two official plugins are available:
+## 📁 Folder Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+frontend/
+├── public/                  # Static assets and index.html
+├── src/
+│   ├── assets/              # Images, icons, fonts
+│   ├── components/          # Reusable UI components (Navbar, Button, Card)
+│   ├── pages/               # Page views (Home, Quiz, Login, Feedback)
+│   ├── services/            # API calls via Axios
+│   ├── App.jsx              # Main app & routing
+│   ├── main.jsx             # Entry point
+│   └── index.css            # Global styles
+├── .env                     # Environment variables
+├── package.json             # Dependencies & scripts
+└── README_Frontend.md       # This file
+```
 
-## Expanding the ESLint configuration
+## ⚙️ Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Node.js v14+
+* npm or yarn
+* Backend API running at `REACT_APP_API_URL`
+
+## 🔧 Installation
+
+1. Clone the repo:
+
+   ```bash
+   git clone <repo-url> frontend
+   cd frontend
+   ```
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+3. Create a `.env` in project root with:
+
+   ```env
+   VITE_API_URL=http://localhost:3000/api
+   ```
+
+## 🚀 Development Server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) to view in browser.
+
+## 📦 Build for Production
+
+```bash
+npm run build
+```
+
+Generated files in `dist/` folder.
+
+## 🔗 Routes & Pages
+
+| Path         | Component  | Description                |
+| ------------ | ---------- | -------------------------- |
+| `/`          | Home       | Landing page with overview |
+| `/login`     | Login      | User sign-in form          |
+| `/register`  | Register   | New user sign-up           |
+| `/quiz`      | Quiz       | Interactive quiz module    |
+| `/feedback`  | Feedback   | Feedback submission form   |
+| `/blogs`     | BlogList   | List of blog posts         |
+| `/blogs/:id` | BlogDetail | View individual blog post  |
+
+## 🔄 Environment Variables
+
+* `VITE_API_URL` – Base URL of backend API
+
+## 🛠️ Scripts
+
+* `npm run dev` – Start dev server with HMR
+* `npm run build` – Build production assets
+* `npm run preview` – Preview production build
+
+## 🎨 Styling & Design
+
+* Uses CSS Modules or Tailwind (optional)
+* Responsive mobile-first layout
+* Adheres to WCAG accessibility standards
+
+---
+
+*Maintained by \[Your Name]*
