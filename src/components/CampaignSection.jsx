@@ -19,9 +19,21 @@ export const CampaignSection = () => {
           <p className="text-gray-500 col-span-full text-center">No campaigns yet.</p>
         )}
         {campaigns.map((camp, idx) => (
-          <div key={idx} className="bg-gray-50 rounded shadow hover:shadow-lg p-4">
-            <h4 className="font-bold text-lg">{camp.title}</h4>
-            <p className="mt-2 text-gray-700">{camp.description}</p>
+          <div key={idx} className="bg-gray-50 rounded shadow hover:shadow-lg overflow-hidden">
+            {camp.image && (
+              <img
+                src={camp.image}
+                alt={camp.title}
+                className="w-full h-40 object-cover"
+              />
+            )}
+            <div className="p-4">
+              <h4 className="font-bold text-lg">{camp.title}</h4>
+              <p className="text-sm text-gray-500 mt-1">
+                {new Date(camp.startTime).toLocaleDateString()} - {new Date(camp.endTime).toLocaleDateString()}
+              </p>
+              <p className="mt-2 text-gray-700">{camp.description}</p>
+            </div>
           </div>
         ))}
       </div>

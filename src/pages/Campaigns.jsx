@@ -31,9 +31,29 @@ const Campaigns = () => {
             <p className="text-gray-500">No campaigns yet.</p>
           )}
           {campaigns.map((camp, idx) => (
-            <div key={idx} className="border rounded p-4 bg-white">
-              <h3 className="font-semibold text-lg">{camp.title}</h3>
-              <p className="text-gray-700 mt-2">{camp.description}</p>
+            <div key={idx} className="border rounded overflow-hidden bg-white">
+              {camp.image && (
+                <img
+                  src={camp.image}
+                  alt={camp.title}
+                  className="w-full h-48 object-cover"
+                />
+              )}
+              <div className="p-4">
+                <h3 className="font-semibold text-lg">{camp.title}</h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Created by {camp.createdBy?.name || camp.createdBy} on{' '}
+                  {new Date(camp.createdAt).toLocaleString()}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {new Date(camp.startTime).toLocaleString()} -{' '}
+                  {new Date(camp.endTime).toLocaleString()}
+                  {new Date(camp.endTime) < new Date() && (
+                    <span className="ml-2 text-red-600 font-semibold">Expired</span>
+                  )}
+                </p>
+                <p className="text-gray-700 mt-2">{camp.description}</p>
+              </div>
             </div>
           ))}
         </div>

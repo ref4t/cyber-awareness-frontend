@@ -7,11 +7,14 @@ import { ToastContainer, toast } from "react-toastify";
 const CreateCampaign = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    API.post("/campaigns", { title, description })
+    API.post("/campaigns", { title, description, image, startTime, endTime })
       .then(() => {
         toast.success("Campaign created!");
         navigate("/campaigns");
@@ -33,17 +36,45 @@ const CreateCampaign = () => {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
-          <textarea
-            placeholder="Campaign description"
+        <textarea
+          placeholder="Campaign description"
+          className="w-full px-3 py-2 border rounded"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Image URL"
+          className="w-full px-3 py-2 border rounded"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          required
+        />
+        <label className="block">
+          <span className="text-sm">Start Date &amp; Time</span>
+          <input
+            type="datetime-local"
             className="w-full px-3 py-2 border rounded"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
             required
           />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
+        </label>
+        <label className="block">
+          <span className="text-sm">End Date &amp; Time</span>
+          <input
+            type="datetime-local"
+            className="w-full px-3 py-2 border rounded"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            required
+          />
+        </label>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
             Submit
           </button>
         </form>
