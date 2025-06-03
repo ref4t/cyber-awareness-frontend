@@ -72,6 +72,8 @@ Generated files in `dist/` folder.
 | `/feedback`  | Feedback   | Feedback submission form   |
 | `/blogs`     | BlogList   | List of blog posts         |
 | `/blogs/:id` | BlogDetail | View individual blog post  |
+| `/campaigns` | Campaigns  | List all campaigns |
+| `/campaigns/create` | CreateCampaign | Create a new campaign |
 
 ## 🔄 Environment Variables
 

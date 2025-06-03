@@ -13,6 +13,7 @@ export const Logout = () => {
         await axios.post("http://localhost:3000/api/auth/logout", {}, { withCredentials: true });
         toast.success("Logged out successfully");
       } catch (err) {
+        console.error(err);
         toast.error("Logout failed");
       } finally {
         navigate("/login");

@@ -10,6 +10,8 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Logout } from "./components/auth/logout";
 import {Dashboard} from "./pages/Dashboard";
 import Blogs from "./pages/Blogs";
+import Campaigns from "./pages/Campaigns";
+import CreateCampaign from "./pages/CreateCampaign";
 
 
 
@@ -20,6 +22,8 @@ const App = () => {
   return (
     <Routes>
     <Route path="/" element={<Home />} />
+    <Route path="/campaigns" element={<Campaigns />} />
+    <Route path="/campaigns/create" element={<CreateCampaign />} />
     <Route path="/blog" element={<Blogs />} />
     <Route path="/login" element={<Login/>} />
     <Route path="/signup" element={<SignUp />} />
