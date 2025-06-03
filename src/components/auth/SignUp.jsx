@@ -1,21 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
 import { AuthLayout } from "./AuthLayout";
-import { Navbar } from "../Navbar";
-import { Link } from "react-router-dom";
+import { Link,Navigate } from "react-router-dom";
 import { ToastContainer,toast } from "react-toastify";
 
 export const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+
     try {
       await axios.post("http://localhost:3000/api/auth/register", {
         name,
@@ -23,6 +19,7 @@ export const SignUp = () => {
         password,
       });
       toast.success("Account created! Please verify your email.");
+      Navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || "Signup failed");
     }

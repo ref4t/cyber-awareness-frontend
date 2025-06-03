@@ -1,7 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { AuthLayout } from "./AuthLayout";
-import { Navbar } from "../Navbar";
+import API from "../../utils/axios";
 
 export const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +14,7 @@ export const ResetPassword = () => {
     setMessage("");
     setError("");
     try {
-      await axios.post("http://localhost:3000/api/auth/reset-password", {
+      await API.post("/reset-password", {
         email,
         otp,
         newPassword,

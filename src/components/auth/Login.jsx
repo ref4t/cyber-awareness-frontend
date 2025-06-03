@@ -10,14 +10,14 @@ import API from "../../utils/axios";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const navigate = useNavigate();
+   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await API.post("/auth/login", { email, password }, { withCredentials: true });
       toast.success("Login successful");
-      // navigate("/dashboard");
+       navigate("/");
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     }
