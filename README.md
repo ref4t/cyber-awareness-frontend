@@ -45,4 +45,4 @@ Generated files in `dist/` folder.
 
 ---
 
-*Maintained by \[Your Name]*
+*Maintained by Abdullah*
