@@ -1,4 +1,5 @@
 import { Navbar } from "../Navbar";
+import { Footer } from "../Footer";
 
 export const AuthLayout = ({ title, children }) => (
   <>
@@ -9,5 +10,6 @@ export const AuthLayout = ({ title, children }) => (
       {children}
     </div>
   </div>
+  <Footer />
   </>
 );

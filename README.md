@@ -74,6 +74,9 @@ Generated files in `dist/` folder.
 | `/blogs/:id` | BlogDetail | View individual blog post  |
 | `/campaigns` | Campaigns  | List all campaigns |
 | `/campaigns/create` | CreateCampaign | Create a new campaign |
+| `/about` | AboutUs | About CyberShield |
+| `/contact` | ContactUs | Contact information |
+| `/terms` | Terms | Terms and conditions |
 
 ## 🔄 Environment Variables
 

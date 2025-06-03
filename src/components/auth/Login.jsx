@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { AuthLayout } from "./AuthLayout";
 import { Navbar } from "../Navbar";
+import { Footer } from "../Footer";
 import API from "../../utils/axios";
 
 export const Login = () => {
@@ -98,6 +99,7 @@ export const Login = () => {
       pauseOnHover
       theme="light"
       />
+    <Footer />
     </>
   );
 };

@@ -9,6 +9,7 @@ export const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isBusiness, setIsBusiness] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +18,7 @@ export const SignUp = () => {
         name,
         email,
         password,
+        isBusiness,
       });
       toast.success("Account created! Please verify your email.");
     } catch (err) {
@@ -31,6 +33,15 @@ export const SignUp = () => {
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your Name" className="w-full px-4 py-2 border rounded" />
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" className="w-full px-4 py-2 border rounded" />
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="********" className="w-full px-4 py-2 border rounded" />
+        <label className="flex items-center space-x-2 text-sm">
+          <input
+            type="checkbox"
+            checked={isBusiness}
+            onChange={(e) => setIsBusiness(e.target.checked)}
+            className="h-4 w-4"
+          />
+          <span>Register as a business</span>
+        </label>
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Sign Up</button>
       </form>
       <div className="text-sm text-center mt-4 space-y-2">

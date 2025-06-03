@@ -1,5 +1,6 @@
 import React from 'react'
 import { Navbar } from '../components/Navbar'
+import { Footer } from '../components/Footer'
 
 export default function Blogs() {
   return (
@@ -71,6 +72,7 @@ export default function Blogs() {
         </div>
       </div>
     </div>
+    <Footer />
     </>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import API from "../utils/axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -91,6 +92,7 @@ const CreateCampaign = () => {
         pauseOnHover
         theme="light"
       />
+      <Footer />
     </>
   );
 };
