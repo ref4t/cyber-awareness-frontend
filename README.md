@@ -1,52 +1,4 @@
-# Cybersecurity Awareness Website - Frontend
-
-This repository contains the **Vite + React** frontend for the Cybersecurity Awareness Website. It provides interactive UI components for quizzes, feedback, user authentication, and educational content.
-
-## 📁 Folder Structure
-
-```
-frontend/
-├── public/                  # Static assets and index.html
-├── src/
-│   ├── assets/              # Images, icons, fonts
-│   ├── components/          # Reusable UI components (Navbar, Button, Card)
-│   ├── pages/               # Page views (Home, Quiz, Login, Feedback)
-│   ├── services/            # API calls via Axios
-│   ├── App.jsx              # Main app & routing
-│   ├── main.jsx             # Entry point
-│   └── index.css            # Global styles
-├── .env                     # Environment variables
-├── package.json             # Dependencies & scripts
-└── README_Frontend.md       # This file
-```
-
-## ⚙️ Prerequisites
-
-* Node.js v14+
-* npm or yarn
-* Backend API running at `REACT_APP_API_URL`
-
-## 🔧 Installation
-
-1. Clone the repo:
-
-   ```bash
-   git clone <repo-url> frontend
-   cd frontend
-   ```
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-3. Create a `.env` in project root with:
-
-   ```env
-   VITE_API_URL=http://localhost:3000/api
-   ```
-
-## 🚀 Development Server
-
+CyberShield Website frontend
 ```bash
 npm run dev
 ```
@@ -72,6 +24,8 @@ Generated files in `dist/` folder.
 | `/feedback`  | Feedback   | Feedback submission form   |
 | `/blogs`     | BlogList   | List of blog posts         |
 | `/blogs/:id` | BlogDetail | View individual blog post  |
+| `/campaigns` | Campaigns  | List all campaigns |
+| `/campaigns/create` | CreateCampaign | Create a new campaign |
 
 ## 🔄 Environment Variables
 
