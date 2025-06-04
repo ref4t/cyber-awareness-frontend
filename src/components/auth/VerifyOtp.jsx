@@ -1,19 +1,22 @@
 import { useState } from "react";
-import axios from "axios";
 import { AuthLayout } from "./AuthLayout";
+import API from "../../utils/axios";
 
 export const VerifyOtp = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  API.post("/send-verify-otp",{
+        
+      });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setError("");
     try {
-      await axios.post("http://localhost:3000/api/auth/verify-otp", {
+      await API.post("/auth/verify-otp", {
         email,
         otp,
       });
