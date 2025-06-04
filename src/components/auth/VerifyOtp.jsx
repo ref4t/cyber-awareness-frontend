@@ -2,18 +2,30 @@ import { useState, useEffect, useRef } from "react";
 import { AuthLayout } from "./AuthLayout";
 import API from "../../utils/axios";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export const VerifyOtp = () => {
-  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(Array(6).fill(""));
+  const [user, setUser] = useState(null);
   const inputRefs = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    API.get("/user/data")
-      .then((res) => setEmail(res.data.user.email))
-      .catch(() => setEmail(""));
-    API.post("/auth/send-verify-otp").catch(() => {});
+    const fetchData = async () => {
+      try {
+        const res = await API.get("/user/data", { withCredentials: true });
+        setUser(res.data.user);
+
+        if (!res.data.user?.hasOtp) {
+          await API.post("/auth/send-verify-otp");
+        }
+      } catch (error) {
+        toast.warning("Please login to access this page.");
+        navigate("/login");
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleChange = (index, value) => {
@@ -48,7 +60,10 @@ export const VerifyOtp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/auth/verify-otp", { otp: otp.join("") });
+      await API.post("/auth/verify-otp", {
+        userId: user._id,
+        otp: otp.join(""),
+      });
       toast.success("Your account has been verified!");
     } catch (err) {
       toast.error(err.response?.data?.message || "Verification failed");
@@ -57,12 +72,17 @@ export const VerifyOtp = () => {
 
   return (
     <AuthLayout title="Verify OTP">
-      <ToastContainer />
-      <form className="space-y-6" onSubmit={handleSubmit} onPaste={handlePaste}>
-        {email && (
-          <p className="text-center text-sm text-gray-600">OTP sent to {email}</p>
+      <form
+        className="space-y-6 mt-4"
+        onSubmit={handleSubmit}
+        onPaste={handlePaste}
+      >
+        {user?.email && (
+          <p className="text-center text-sm text-emerald-700">
+            OTP has been sent to <strong>{user.email}</strong>
+          </p>
         )}
-        <div className="flex justify-center space-x-2">
+        <div className="flex justify-center space-x-3">
           {otp.map((digit, idx) => (
             <input
               key={idx}
@@ -72,14 +92,18 @@ export const VerifyOtp = () => {
               value={digit}
               onChange={(e) => handleChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e, idx)}
-              className="w-10 h-10 border text-center rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-12 h-12 text-xl border border-emerald-400 text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           ))}
         </div>
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        <button
+          type="submit"
+          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg font-semibold"
+        >
           Verify
         </button>
       </form>
+      <ToastContainer position="bottom-right" theme="light" />
     </AuthLayout>
   );
 };
