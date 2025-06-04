@@ -65,6 +65,9 @@ export const VerifyOtp = () => {
         otp: otp.join(""),
       });
       toast.success("Your account has been verified!");
+      setTimeout(()=> {
+        navigate('/dashboard');
+        }, 2000)
     } catch (err) {
       toast.error(err.response?.data?.message || "Verification failed");
     }

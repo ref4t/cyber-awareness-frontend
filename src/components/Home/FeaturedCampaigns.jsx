@@ -8,7 +8,7 @@ export const FeaturedCampaigns = () => {
       title: "Cyber Hygiene for SMEs",
       description: "We launched a city-wide campaign promoting secure login practices and employee awareness training.",
       industry: "IT Services",
-      image: "/images/campaign-1.jpg",
+      image: "/images/campaign-1.webp",
     },
     {
       id: 2,

@@ -71,7 +71,7 @@ export const PartnerLogos = () => {
   const logos = [
     {
       name: "Microsoft",
-      url: "https://logos-world.net/wp-content/uploads/2020/04/Microsoft-Logo.png",
+      url: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png",
     },
     {
       name: "IBM",
@@ -82,8 +82,8 @@ export const PartnerLogos = () => {
       url: "https://cdn.worldvectorlogo.com/logos/aws-2.svg",
     },
     {
-      name: "Norton",
-      url: "https://cdn.worldvectorlogo.com/logos/norton-antivirus.svg",
+      name: "Google",
+      url: "https://www.gstatic.com/marketing-cms/assets/images/c5/3a/200414104c669203c62270f7884f/google-wordmarks-2x.webp",
     },
     {
       name: "Kaspersky",
@@ -91,7 +91,7 @@ export const PartnerLogos = () => {
     },
     {
       name: "McAfee",
-      url: "https://cdn.worldvectorlogo.com/logos/mcafee-7.svg",
+      url: "https://media.mcafeeassets.com/content/dam/npcld/ecommerce/en/company-logo/McAfeeHzRed.svg",
     },
   ];
 

@@ -1,3 +1,4 @@
+import { Mail, Lock, User, Building2, MapPin, FileText } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -5,6 +6,18 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navbar } from "../Navbar";
 import { Footer } from "../Footer";
+
+const InputWithIcon = ({ icon: Icon, ...props }) => (
+    <div className="relative">
+      <span className="absolute left-3 top-3 text-emerald-500">
+        <Icon size={18} />
+      </span>
+      <input
+        {...props}
+        className="w-full pl-10 pr-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+      />
+    </div>
+  );
 
 export const SignUp = () => {
   const [name, setName] = useState("");
@@ -16,90 +29,88 @@ export const SignUp = () => {
   const [businessAddress, setBusinessAddress] = useState("");
   const [businessDetails, setBusinessDetails] = useState("");
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!name || !email || !password || !confirmPassword) {
-    toast.error("Please fill in all required fields.");
-    return;
-  }
+    if (!name || !email || !password || !confirmPassword) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
 
-  if (password.length < 6) {
-    toast.error("Password must be at least 6 characters.");
-    return;
-  }
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return;
+    }
 
-  if (password !== confirmPassword) {
-    toast.error("Passwords do not match.");
-    return;
-  }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
 
-  if (isBusiness) {
-    if (!businessName || !businessAddress || !businessDetails) {
+    if (isBusiness && (!businessName || !businessAddress || !businessDetails)) {
       toast.error("Please complete all business fields.");
       return;
     }
-  }
 
-  try {
-    await axios.post("http://localhost:3000/api/auth/register", {
-      name,
-      email,
-      password,
-      isBusiness,
-      businessName: isBusiness ? businessName : undefined,
-      businessAddress: isBusiness ? businessAddress : undefined,
-      businessDetails: isBusiness ? businessDetails : undefined,
-    });
+    try {
+      await axios.post("http://localhost:3000/api/auth/register", {
+        name,
+        email,
+        password,
+        isBusiness,
+        businessName: isBusiness ? businessName : undefined,
+        businessAddress: isBusiness ? businessAddress : undefined,
+        businessDetails: isBusiness ? businessDetails : undefined,
+      });
 
-    toast.success("Account created! Please verify your email.");
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Signup failed");
-  }
-};
+      toast.success("Account created! Please verify your email.");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Signup failed");
+    }
+  };
 
 
   return (
     <>
       <Navbar />
       <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-white">
-        {/* Left: Form */}
-        <div className="flex flex-col justify-center px-8 md:px-80 py-12">
-          <h2 className="text-3xl font-bold text-emerald-600 mb-6">Create Your Account</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
+        <div className="flex flex-col justify-center px-8 md:px-40 py-12">
+          <h2 className="text-3xl font-bold text-emerald-600 mb-6 text-center">Create Your Account</h2>
+          <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md mx-auto">
+            <InputWithIcon
+              icon={User}
               type="text"
               placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
-            <input
+            <InputWithIcon
+              icon={Mail}
               type="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
-            <input
+            <InputWithIcon
+              icon={Lock}
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
-            <input
+            <InputWithIcon
+              icon={Lock}
               type="password"
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
-            <label className="flex items-center text-sm text-emerald-700">
+
+            <label className="flex items-center text-sm text-emerald-700 mt-2">
               <input
                 type="checkbox"
                 checked={isBusiness}
@@ -111,28 +122,26 @@ const handleSubmit = async (e) => {
 
             {isBusiness && (
               <>
-                <input
+                <InputWithIcon
+                  icon={Building2}
                   type="text"
                   placeholder="Business Name"
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
-                <input
+                <InputWithIcon
+                  icon={MapPin}
                   type="text"
                   placeholder="Business Address"
                   value={businessAddress}
                   onChange={(e) => setBusinessAddress(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
-                <textarea
+                <InputWithIcon
+                  icon={FileText}
+                  type="text"
                   placeholder="Business Details"
                   value={businessDetails}
                   onChange={(e) => setBusinessDetails(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 border border-emerald-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
               </>
             )}
@@ -156,11 +165,13 @@ const handleSubmit = async (e) => {
 
         {/* Right: Illustration */}
         <div className="hidden md:flex items-center justify-center bg-emerald-50">
-          <img
-            src="/images/signup-illustration.png"
-            alt="Cybersecurity signup visual"
-            className="w-3/4 max-h-[80%] object-contain"
-          />
+          <div className="p-6 rounded-lg shadow-md bg-white">
+            <img
+              src="/images/signup-illustration.png"
+              alt="Cybersecurity login visual"
+              className="w-[520px] h-[520px] object-contain rounded-lg"
+            />
+          </div>
         </div>
       </div>
       <ToastContainer position="bottom-right" theme="light" />

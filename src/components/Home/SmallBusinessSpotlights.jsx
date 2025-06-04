@@ -6,19 +6,19 @@ export const SmallBusinessSpotlights = () => {
       quote: "CyberShield helped us run our first cyber safety campaign!",
       business: "GreenTech Solutions",
       industry: "Retail",
-      logo: "/images/business1-logo.png",
+      logo: "https://cdn.worldvectorlogo.com/logos/ibm.svg",
     },
     {
       quote: "Easy to use and great results!",
       business: "ByteSecure Co",
       industry: "IT Services",
-      logo: "/images/business2-logo.png",
+      logo: "https://cdn.worldvectorlogo.com/logos/kaspersky-lab-1.svg",
     },
     {
       quote: "Helped us build trust with our customers!",
       business: "SafeSteps Pty Ltd",
       industry: "E-Commerce",
-      logo: "/images/business3-logo.png",
+      logo: "https://cdn.worldvectorlogo.com/logos/aws-2.svg",
     },
   ];
 
