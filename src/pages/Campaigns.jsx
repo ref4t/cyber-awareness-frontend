@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 import { Link } from "react-router-dom";
 import API from "../utils/axios";
 
@@ -14,9 +15,9 @@ const Campaigns = () => {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="max-w-5xl mx-auto p-6">
+      <main className="flex-grow max-w-5xl mx-auto p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Campaigns</h2>
           <Link
@@ -57,8 +58,9 @@ const Campaigns = () => {
             </div>
           ))}
         </div>
-      </div>
-    </>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

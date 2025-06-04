@@ -12,6 +12,9 @@ import {Dashboard} from "./pages/Dashboard";
 import Blogs from "./pages/Blogs";
 import Campaigns from "./pages/Campaigns";
 import CreateCampaign from "./pages/CreateCampaign";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
+import Terms from "./pages/Terms";
 
 
 
@@ -23,8 +26,18 @@ const App = () => {
     <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/campaigns" element={<Campaigns />} />
-    <Route path="/campaigns/create" element={<CreateCampaign />} />
+    <Route
+      path="/campaigns/create"
+      element={
+        <ProtectedRoute>
+          <CreateCampaign />
+        </ProtectedRoute>
+      }
+    />
     <Route path="/blog" element={<Blogs />} />
+    <Route path="/about" element={<AboutUs />} />
+    <Route path="/contact" element={<ContactUs />} />
+    <Route path="/terms" element={<Terms />} />
     <Route path="/login" element={<Login/>} />
     <Route path="/signup" element={<SignUp />} />
     <Route path="/forgot-password" element={<ForgotPassword />} />

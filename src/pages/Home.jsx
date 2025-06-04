@@ -8,12 +8,14 @@ import { Footer } from "../components/Footer";
 
 const Home = () => {
   return (
-    <div className="font-sans text-gray-800 bg-gradient-to-b from-emerald-50 via-white to-white">
+    <div className="min-h-screen flex flex-col font-sans text-gray-800 bg-gradient-to-b from-emerald-50 via-white to-white">
       <Navbar />
-      <HeroSection />
-      <Features />
-      <BlogSection />
-      <CampaignSection />
+      <main className="flex-grow">
+        <HeroSection />
+        <Features />
+        <BlogSection />
+        <CampaignSection />
+      </main>
       <Footer />
     </div>
   );
