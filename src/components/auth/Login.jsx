@@ -3,9 +3,9 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthLayout } from "./AuthLayout";
 import { Navbar } from "../Navbar";
 import API from "../../utils/axios";
+import { Footer } from "../Footer";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -98,6 +98,7 @@ export const Login = () => {
       pauseOnHover
       theme="light"
       />
+      <Footer/>
     </>
   );
 };

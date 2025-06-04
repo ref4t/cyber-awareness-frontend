@@ -4,11 +4,37 @@ import API from "../utils/axios";
 
 export const CampaignSection = () => {
   const [campaigns, setCampaigns] = useState([]);
+  const fallback = [
+    {
+      title: "Cyber Safety Week",
+      description: "Join us for daily tips on protecting your business online.",
+      image: "https://via.placeholder.com/400x200?text=Campaign+1",
+      startTime: new Date().toISOString(),
+      endTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      title: "Secure Passwords",
+      description: "Learn how to create strong passwords that keep hackers out.",
+      image: "https://via.placeholder.com/400x200?text=Campaign+2",
+      startTime: new Date().toISOString(),
+      endTime: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      title: "Phishing Awareness",
+      description: "Recognize and avoid phishing scams with these best practices.",
+      image: "https://via.placeholder.com/400x200?text=Campaign+3",
+      startTime: new Date().toISOString(),
+      endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ];
 
   useEffect(() => {
     API.get("/campaigns")
-      .then((res) => setCampaigns(res.data.campaigns?.slice(0, 3) || []))
-      .catch(() => setCampaigns([]));
+      .then((res) => {
+        const list = res.data.campaigns?.slice(0, 3) || [];
+        setCampaigns(list.length ? list : fallback);
+      })
+      .catch(() => setCampaigns(fallback));
   }, []);
 
   return (

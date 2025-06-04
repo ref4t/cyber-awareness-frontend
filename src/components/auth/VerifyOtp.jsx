@@ -1,39 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AuthLayout } from "./AuthLayout";
 import API from "../../utils/axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const VerifyOtp = () => {
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  API.post("/send-verify-otp",{
-        
-      });
+  const [otp, setOtp] = useState(Array(6).fill(""));
+  const inputRefs = useRef([]);
+
+  useEffect(() => {
+    API.get("/user/data")
+      .then((res) => setEmail(res.data.user.email))
+      .catch(() => setEmail(""));
+    API.post("/auth/send-verify-otp").catch(() => {});
+  }, []);
+
+  const handleChange = (index, value) => {
+    if (!/^[0-9]?$/.test(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    if (value && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    const pasteData = e.clipboardData.getData("text").trim();
+    if (!/^[0-9]{6}$/.test(pasteData)) return;
+    const pasteOtp = pasteData.split("");
+    setOtp(pasteOtp);
+    pasteOtp.forEach((digit, idx) => {
+      if (inputRefs.current[idx]) {
+        inputRefs.current[idx].value = digit;
+      }
+    });
+    if (inputRefs.current[5]) inputRefs.current[5].focus();
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && inputRefs.current[index - 1]) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
-    setError("");
     try {
-      await API.post("/auth/verify-otp", {
-        email,
-        otp,
-      });
-      setMessage("Your account has been verified.");
+      await API.post("/auth/verify-otp", { otp: otp.join("") });
+      toast.success("Your account has been verified!");
     } catch (err) {
-      setError(err.response?.data?.message || "Verification failed");
+      toast.error(err.response?.data?.message || "Verification failed");
     }
   };
 
   return (
     <AuthLayout title="Verify OTP">
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" className="w-full px-4 py-2 border rounded" />
-        <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} required placeholder="Enter OTP" className="w-full px-4 py-2 border rounded" />
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        {message && <p className="text-green-500 text-sm">{message}</p>}
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Verify</button>
+      <ToastContainer />
+      <form className="space-y-6" onSubmit={handleSubmit} onPaste={handlePaste}>
+        {email && (
+          <p className="text-center text-sm text-gray-600">OTP sent to {email}</p>
+        )}
+        <div className="flex justify-center space-x-2">
+          {otp.map((digit, idx) => (
+            <input
+              key={idx}
+              ref={(el) => (inputRefs.current[idx] = el)}
+              type="text"
+              maxLength="1"
+              value={digit}
+              onChange={(e) => handleChange(idx, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e, idx)}
+              className="w-10 h-10 border text-center rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          ))}
+        </div>
+        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+          Verify
+        </button>
       </form>
     </AuthLayout>
   );
