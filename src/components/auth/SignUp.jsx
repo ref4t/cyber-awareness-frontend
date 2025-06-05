@@ -27,7 +27,7 @@ export const SignUp = () => {
   const [isBusiness, setIsBusiness] = useState(false);
   const [businessName, setBusinessName] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
-  const [businessDetails, setBusinessDetails] = useState("");
+  const [businessAbn, setbusinessAbn] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +47,7 @@ export const SignUp = () => {
       return;
     }
 
-    if (isBusiness && (!businessName || !businessAddress || !businessDetails)) {
+    if (isBusiness && (!businessName || !businessAddress || !businessAbn)) {
       toast.error("Please complete all business fields.");
       return;
     }
@@ -60,7 +60,7 @@ export const SignUp = () => {
         isBusiness,
         businessName: isBusiness ? businessName : undefined,
         businessAddress: isBusiness ? businessAddress : undefined,
-        businessDetails: isBusiness ? businessDetails : undefined,
+        businessAbn: isBusiness ? businessAbn : undefined,
       });
 
       toast.success("Account created! Please verify your email.");
@@ -139,9 +139,9 @@ export const SignUp = () => {
                 <InputWithIcon
                   icon={FileText}
                   type="text"
-                  placeholder="Business Details"
-                  value={businessDetails}
-                  onChange={(e) => setBusinessDetails(e.target.value)}
+                  placeholder="ABN"
+                  value={businessAbn}
+                  onChange={(e) => setbusinessAbn(e.target.value)}
                 />
               </>
             )}
