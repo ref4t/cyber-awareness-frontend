@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import API from "../utils/axios";
 import { ToastContainer, toast } from "react-toastify";
+import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
 
 const CreateCampaign = () => {
   const [title, setTitle] = useState("");
@@ -11,7 +12,14 @@ const CreateCampaign = () => {
   const [image, setImage] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    API.get("/user/data")
+      .then((res) => setUser(res.data.user))
+      .catch(() => setUser(null));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,11 +32,13 @@ const CreateCampaign = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col font-sans">
       <Navbar />
-      <main className="flex-grow max-w-3xl mx-auto p-6">
-        <h2 className="text-2xl font-bold mb-4">Create Campaign</h2>
-        <form className="space-y-4" onSubmit={handleSubmit}>
+      <div className="flex flex-grow">
+        <DashboardSidebar user={user} />
+        <main className="flex-grow max-w-3xl mx-auto p-6">
+          <h2 className="text-2xl font-bold mb-4">Create Campaign</h2>
+          <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Campaign title"
@@ -78,8 +88,9 @@ const CreateCampaign = () => {
         >
             Submit
           </button>
-        </form>
-      </main>
+          </form>
+        </main>
+      </div>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
