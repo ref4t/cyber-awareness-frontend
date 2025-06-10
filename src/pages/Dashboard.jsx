@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
 import API from "../utils/axios";
 
 export const Dashboard = () => {
@@ -28,12 +29,14 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-800">
       <Navbar />
-      <main className="flex-grow p-6 space-y-6">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Welcome {user?.name}</h2>
+      <div className="flex flex-grow">
+        <DashboardSidebar user={user} />
+        <main className="flex-grow p-6 space-y-6">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold">Welcome {user?.name}</h2>
             <p className="text-gray-700">Email: {user?.email}</p>
             {user?.isBusiness && (
               <p className="text-gray-700">Business: {user.businessName}</p>
@@ -79,7 +82,8 @@ export const Dashboard = () => {
             </div>
           )}
         </section>
-      </main>
+        </main>
+      </div>
       <Footer />
     </div>
   );
