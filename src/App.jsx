@@ -10,6 +10,7 @@ import { ResetPassword } from "./components/auth/ResetPassword";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Logout } from "./components/auth/logout";
 import { Dashboard } from "./pages/Dashboard";
+import { UserDetails } from "./pages/UserDetails";
 import Blogs from "./pages/Blogs";
 import Campaigns from "./pages/Campaigns";
 import CreateCampaign from "./pages/CreateCampaign";
@@ -48,6 +49,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/details"
+          element={
+            <ProtectedRoute>
+              <UserDetails />
             </ProtectedRoute>
           }
         />
