@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../../utils/axios";
 import { AuthLayout } from "./AuthLayout";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ export const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/auth/forgot-password", { email });
+      await API.post("/auth/forgot-password", { email });
       toast.success("Reset OTP sent to your email.");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to send OTP");

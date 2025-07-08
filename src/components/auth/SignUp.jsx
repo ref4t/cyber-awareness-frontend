@@ -1,11 +1,12 @@
 import { Mail, Lock, User, Building2, MapPin, FileText } from "lucide-react";
 import { useState } from "react";
-import axios from "axios";
+
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navbar } from "../Navbar";
 import { Footer } from "../Footer";
+import API from "../../utils/axios";
 
 const InputWithIcon = ({ icon: Icon, ...props }) => (
     <div className="relative">
@@ -53,7 +54,7 @@ export const SignUp = () => {
     }
 
         try {
-        await axios.post("http://localhost:3000/api/auth/register", {
+        await API.post("/auth/register", {
           name,
           email,
           password,

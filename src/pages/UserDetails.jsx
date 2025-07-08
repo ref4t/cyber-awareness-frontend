@@ -1,3 +1,4 @@
+// src/pages/UserDetails.jsx
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
@@ -40,7 +41,6 @@ const UserDetails = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     const payload = { name, email, role };
-    // if user is business or converting, include business details
     if (role === "business") {
       if (!businessName || !businessAddress || !businessAbn) {
         toast.error("Please fill in all business details");
@@ -52,9 +52,19 @@ const UserDetails = () => {
       await API.put("/user/update", payload, { withCredentials: true });
       toast.success("Details updated");
       setIsConverting(false);
+      // refresh user data
+      setLoading(true);
+      const res = await API.get("/user/data", { withCredentials: true });
+      setUser(res.data.user);
+      setLoading(false);
     } catch {
       toast.error("Update failed");
     }
+  };
+
+  const startConvert = () => {
+    setRole("business");
+    setIsConverting(true);
   };
 
   if (loading) {
@@ -75,7 +85,6 @@ const UserDetails = () => {
 
           <form onSubmit={handleSave} className="space-y-4 bg-white p-6 rounded-lg shadow">
             <div className="grid gap-4">
-              {/* Name & Email */}
               <div>
                 <label className="block text-sm font-medium text-emerald-700 mb-1">Name</label>
                 <input
@@ -95,13 +104,10 @@ const UserDetails = () => {
                 />
               </div>
 
-              {/* Business Fields */}
-              {(role === "business" || isConverting) && (
+              {(role === "business") && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-emerald-700 mb-1">
-                      Business Name
-                    </label>
+                    <label className="block text-sm font-medium text-emerald-700 mb-1">Business Name</label>
                     <input
                       type="text"
                       className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
@@ -110,9 +116,7 @@ const UserDetails = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-emerald-700 mb-1">
-                      Business Address
-                    </label>
+                    <label className="block text-sm font-medium text-emerald-700 mb-1">Business Address</label>
                     <input
                       type="text"
                       className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
@@ -137,18 +141,16 @@ const UserDetails = () => {
               type="submit"
               className="mt-4 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700"
             >
-              {role === "general" && isConverting
-                ? "Create Business Account"
-                : "Save Changes"}
+              {role === "business" ? "Save Business Details" : "Save Changes"}
             </button>
           </form>
 
-          {/* Convert Button */}
-          {role === "general" && !isConverting && (
+          {/* Convert Button for General Users Only */}
+          {user.role === "general" && !isConverting && (
             <div className="bg-white p-6 rounded-lg shadow text-center">
               <p className="text-gray-700 mb-4">Want to post campaigns? Become a business:</p>
               <button
-                onClick={() => setIsConverting(true)}
+                onClick={startConvert}
                 className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700"
               >
                 Convert to Business

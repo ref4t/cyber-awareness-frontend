@@ -1,78 +1,81 @@
-import React from 'react'
-import { Navbar } from '../components/Navbar'
-import { Footer } from '../components/Footer'
+// src/pages/Blogs.jsx
+import React, { useEffect, useState } from "react";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
+import { Link, useNavigate } from "react-router-dom";
+import API from "../utils/axios";
 
 export default function Blogs() {
+  const [blogs, setBlogs] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    API.get("/blogs")
+      .then(res => setBlogs(res.data.blogs || []))
+      .catch(() => setBlogs([]));
+  }, []);
+
+  // only show approved posts
+  const approvedBlogs = blogs.filter(b => b.status === "approved");
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+
       <main className="flex-grow bg-gray-100 px-4 py-12">
-        <div className="max-w-5xl max-lg:max-w-3xl max-sm:max-w-sm mx-auto">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">Latest Blog Posts</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-sm:gap-8">
-          <div className="bg-white rounded-sm overflow-hidden">
-            <img src="https://readymadeui.com/cardImg.webp" alt="Blog Post 1" className="w-full h-52 object-cover" />
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Lorem Ipsum Dolor</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
-              <p className="text-orange-500 text-[13px] font-semibold mt-2">08 April 2024</p>
-              <a href="javascript:void(0);" className="mt-6 inline-block px-4 py-2 rounded-sm tracking-wider bg-orange-500 hover:bg-orange-600 text-white text-[13px] font-medium">Read More</a>
-            </div>
+        <div className="max-w-5xl lg:max-w-4xl sm:max-w-2xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-slate-900">
+              Latest Blog Posts
+            </h2>
+            {/* Optional: show “New Blog” if user is authenticated */}
+            <button
+              onClick={() => navigate("/blog/create")}
+              className="hidden md:inline-block px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+            >
+              + New Blog
+            </button>
           </div>
 
-          <div className="bg-white rounded-sm overflow-hidden">
-            <img src="https://readymadeui.com/hotel-img.webp" alt="Blog Post 2" className="w-full h-52 object-cover" />
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Consectetur Adipiscing</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
-              <p className="text-orange-500 text-[13px] font-semibold mt-2">08 April 2024</p>
-              <a href="javascript:void(0);" className="mt-6 inline-block px-4 py-2 rounded-sm tracking-wider bg-orange-500 hover:bg-orange-600 text-white text-[13px] font-medium">Read More</a>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-sm overflow-hidden">
-            <img src="https://readymadeui.com/team-image.webp" alt="Blog Post 3" className="w-full h-52 object-cover" />
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Lorem Ipsum Sit Amet</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
-              <p className="text-orange-500 text-[13px] font-semibold mt-2">08 April 2024</p>
-              <a href="javascript:void(0);" className="mt-6 inline-block px-4 py-2 rounded-sm tracking-wider bg-orange-500 hover:bg-orange-600 text-white text-[13px] font-medium">Read More</a>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-sm overflow-hidden">
-            <img src="https://readymadeui.com/prediction.webp" alt="Blog Post 3" className="w-full h-52 object-cover" />
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Lorem Ipsum Sit Amet</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
-              <p className="text-orange-500 text-[13px] font-semibold mt-2">08 April 2024</p>
-              <a href="javascript:void(0);" className="mt-6 inline-block px-4 py-2 rounded-sm tracking-wider bg-orange-500 hover:bg-orange-600 text-white text-[13px] font-medium">Read More</a>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-sm overflow-hidden">
-            <img src="https://readymadeui.com/hacks-watch.webp" alt="Blog Post 3" className="w-full h-52 object-cover" />
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Lorem Ipsum Sit Amet</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
-              <p className="text-orange-500 text-[13px] font-semibold mt-2">08 April 2024</p>
-              <a href="javascript:void(0);" className="mt-6 inline-block px-4 py-2 rounded-sm tracking-wider bg-orange-500 hover:bg-orange-600 text-white text-[13px] font-medium">Read More</a>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-sm overflow-hidden">
-            <img src="https://readymadeui.com/Imagination.webp" alt="Blog Post 3" className="w-full h-52 object-cover" />
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 mb-3">Lorem Ipsum Sit Amet</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
-              <p className="text-orange-500 text-[13px] font-semibold mt-2">08 April 2024</p>
-              <a href="javascript:void(0);" className="mt-6 inline-block px-4 py-2 rounded-sm tracking-wider bg-orange-500 hover:bg-orange-600 text-white text-[13px] font-medium">Read More</a>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {approvedBlogs.map(blog => (
+              <div
+                key={blog._id}
+                className="bg-white rounded overflow-hidden shadow"
+              >
+                {blog.imageUrl && (
+                  <img
+                    src={blog.imageUrl}
+                    alt={blog.title}
+                    className="w-full h-48 object-cover"
+                  />
+                )}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                    {blog.title}
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                    {blog.content.length > 120
+                      ? blog.content.slice(0, 120) + "…"
+                      : blog.content}
+                  </p>
+                  <p className="text-orange-500 text-xs font-semibold">
+                    {new Date(blog.createdAt).toLocaleDateString()}
+                  </p>
+                  <Link
+                    to={`/blog/${blog._id}`}
+                    className="mt-4 inline-block px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium rounded"
+                  >
+                    Read More
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-    </main>
-    <Footer />
+      </main>
+
+      <Footer />
     </div>
-  )
+  );
 }

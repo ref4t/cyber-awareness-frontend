@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+// src/components/Navbar.jsx
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import API from "../utils/axios";
 
@@ -47,7 +48,11 @@ export const Navbar = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              d={
+                mobileMenuOpen
+                  ? "M6 18L18 6M6 6l12 12"
+                  : "M4 6h16M4 12h16M4 18h16"
+              }
             />
           </svg>
         </button>
@@ -58,7 +63,14 @@ export const Navbar = () => {
           <Link to="/campaigns" className="hover:text-white/80">Campaigns</Link>
           <Link to="/blog" className="hover:text-white/80">Blog</Link>
           <Link to="/resources" className="hover:text-white/80">Resources</Link>
-
+          {isLoggedIn && user?.role === 'admin' && (
+            <Link
+              to="/admin"
+              className="bg-yellow-500 text-white px-3 py-1 rounded-md font-semibold hover:bg-yellow-600"
+            >
+              Admin
+            </Link>
+          )}
           {isLoggedIn ? (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -68,12 +80,27 @@ export const Navbar = () => {
                 {user?.name || "User"} ▾
               </button>
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-44 bg-white text-gray-700 border rounded shadow-lg z-20">
+                <div className="absolute right-0 mt-2 w-48 bg-white text-gray-700 border rounded shadow-lg z-20">
                   {!user?.isAccountVerified && (
-                    <Link to="/verify-otp" className="block px-4 py-2 text-sm hover:bg-gray-100">Verify Email</Link>
+                    <Link
+                      to="/verify-otp"
+                      className="block px-4 py-2 text-sm hover:bg-gray-100"
+                    >
+                      Verify Email
+                    </Link>
                   )}
-                  <Link to="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Dashboard</Link>
-                  <Link to="/logout" className="block px-4 py-2 text-sm hover:bg-gray-100">Logout</Link>
+                  <Link
+                    to="/dashboard"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/logout"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Logout
+                  </Link>
                 </div>
               )}
             </div>
@@ -95,11 +122,20 @@ export const Navbar = () => {
           <Link to="/campaigns" className="block py-1 border-b border-emerald-500">Campaigns</Link>
           <Link to="/blog" className="block py-1 border-b border-emerald-500">Blog</Link>
           <Link to="/resources" className="block py-1 border-b border-emerald-500">Resources</Link>
-
+          {isLoggedIn && user?.role === 'admin' && (
+            <Link
+              to="/admin"
+              className="block py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+            >
+              Admin
+            </Link>
+          )}
           {isLoggedIn ? (
             <>
               {!user?.isAccountVerified && (
-                <Link to="/verify-otp" className="block py-1 border-b border-emerald-500">Verify Email</Link>
+                <Link to="/verify-otp" className="block py-1 border-b border-emerald-500">
+                  Verify Email
+                </Link>
               )}
               <Link to="/dashboard" className="block py-1 border-b border-emerald-500">Dashboard</Link>
               <Link to="/logout" className="block py-1">Logout</Link>
