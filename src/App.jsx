@@ -24,6 +24,7 @@ import ViewCampaign from "./pages/ViewCampaigs";
 import EditCampaign from "./pages/EditCampaign";
 import AdminDashboard from "./pages/AdminDashboard";
 
+
 const App = () => {
   return (
     <>
@@ -48,6 +49,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route path="/campaigns/:id" element={<ViewCampaign />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/about" element={<AboutUs />} />

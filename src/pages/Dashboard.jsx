@@ -77,7 +77,20 @@ export default function Dashboard() {
               Hello, {user.name}
             </h2>
             <p className="text-gray-700">Email: {user.email}</p>
+
             {user.isBusiness && user.businessName && (
+            <p className="text-gray-700">
+              Role: <span className="capitalize font-semibold">{user.role}</span>
+            </p>
+            {user.role === "general" && (
+              <button
+                onClick={() => navigate("/dashboard/details")}
+                className="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition"
+              >
+                Convert to Business
+              </button>
+            )}
+            {user.role === "business" && user.businessName && (
               <p className="text-gray-700 mt-2">
                 Business: <span className="font-semibold">{user.businessName}</span>
               </p>
