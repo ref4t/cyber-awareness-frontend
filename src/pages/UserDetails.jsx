@@ -13,11 +13,14 @@ const UserDetails = () => {
   // Editable fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("general");
+
   const [businessName, setBusinessName] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
   const [businessAbn, setBusinessAbn] = useState("");
-  const [isConverting, setIsConverting] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+
 
   useEffect(() => {
     API.get("/user/data", { withCredentials: true })
@@ -26,8 +29,8 @@ const UserDetails = () => {
         setUser(u);
         setName(u.name);
         setEmail(u.email);
-        setRole(u.role);
-        if (u.role === "business") {
+        if (u.isBusiness) {
+
           setBusinessName(u.businessName || "");
           setBusinessAddress(u.businessAddress || "");
           setBusinessAbn(u.businessAbn || "");
@@ -37,24 +40,31 @@ const UserDetails = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSave = async (e) => {
+
+  const handleUpdateDetails = (e) => {
     e.preventDefault();
-    const payload = { name, email, role };
-    // if user is business or converting, include business details
-    if (role === "business") {
-      if (!businessName || !businessAddress || !businessAbn) {
-        toast.error("Please fill in all business details");
-        return;
-      }
-      Object.assign(payload, { businessName, businessAddress, businessAbn });
-    }
-    try {
-      await API.put("/user/update", payload, { withCredentials: true });
-      toast.success("Details updated");
-      setIsConverting(false);
-    } catch {
-      toast.error("Update failed");
-    }
+    API.put("/user/update", {
+      name,
+      email,
+      businessName,
+      businessAddress,
+      businessAbn,
+    })
+      .then(() => toast.success("Details updated"))
+      .catch(() => toast.error("Update failed"));
+  };
+
+  const handleUpdatePassword = (e) => {
+    e.preventDefault();
+    API.put("/user/update-password", { currentPassword, newPassword })
+      .then(() => {
+        toast.success("Password updated");
+        setCurrentPassword("");
+        setNewPassword("");
+        setShowPasswordModal(false);
+      })
+      .catch(() => toast.error("Password update failed"));
+
   };
 
   if (loading) {
@@ -73,7 +83,9 @@ const UserDetails = () => {
         <main className="flex-grow p-6 max-w-3xl mx-auto space-y-6">
           <h1 className="text-2xl font-bold text-emerald-700">Account Settings</h1>
 
-          <form onSubmit={handleSave} className="space-y-4 bg-white p-6 rounded-lg shadow">
+
+          <form onSubmit={handleUpdateDetails} className="space-y-4 bg-white p-6 rounded-lg shadow">
+
             <div className="grid gap-4">
               {/* Name & Email */}
               <div>
@@ -96,7 +108,9 @@ const UserDetails = () => {
               </div>
 
               {/* Business Fields */}
-              {(role === "business" || isConverting) && (
+
+              {user?.isBusiness && (
+
                 <>
                   <div>
                     <label className="block text-sm font-medium text-emerald-700 mb-1">
@@ -135,28 +149,55 @@ const UserDetails = () => {
 
             <button
               type="submit"
-              className="mt-4 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700"
+              className="px-4 py-2 bg-emerald-600 text-white rounded"
             >
-              {role === "general" && isConverting
-                ? "Create Business Account"
-                : "Save Changes"}
+              Save Changes
             </button>
           </form>
-
-          {/* Convert Button */}
-          {role === "general" && !isConverting && (
-            <div className="bg-white p-6 rounded-lg shadow text-center">
-              <p className="text-gray-700 mb-4">Want to post campaigns? Become a business:</p>
-              <button
-                onClick={() => setIsConverting(true)}
-                className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700"
-              >
-                Convert to Business
-              </button>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => setShowPasswordModal(true)}
+            className="px-4 py-2 bg-emerald-600 text-white rounded"
+          >
+            Change Password
+          </button>
         </main>
       </div>
+      {showPasswordModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-80 space-y-4">
+            <h2 className="text-xl font-semibold">Update Password</h2>
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <input
+                type="password"
+                className="w-full border px-3 py-2 rounded"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Current Password"
+              />
+              <input
+                type="password"
+                className="w-full border px-3 py-2 rounded"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="New Password"
+              />
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="px-4 py-2 bg-emerald-600 text-white rounded">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <Footer />
       <ToastContainer position="bottom-right" theme="light" />

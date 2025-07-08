@@ -77,6 +77,8 @@ export default function Dashboard() {
               Hello, {user.name}
             </h2>
             <p className="text-gray-700">Email: {user.email}</p>
+
+            {user.isBusiness && user.businessName && (
             <p className="text-gray-700">
               Role: <span className="capitalize font-semibold">{user.role}</span>
             </p>
