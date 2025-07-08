@@ -52,16 +52,18 @@ export const SignUp = () => {
       return;
     }
 
-    try {
-      await axios.post("http://localhost:3000/api/auth/register", {
-        name,
-        email,
-        password,
-        isBusiness,
-        businessName: isBusiness ? businessName : undefined,
-        businessAddress: isBusiness ? businessAddress : undefined,
-        businessAbn: isBusiness ? businessAbn : undefined,
-      });
+        try {
+        await axios.post("http://localhost:3000/api/auth/register", {
+          name,
+          email,
+          password,
+          role: isBusiness ? "business" : "general",
+          ...(isBusiness && {
+            businessName,
+            businessAddress,
+            businessAbn
+          })
+        });
 
       toast.success("Account created! Please verify your email.");
     } catch (err) {
