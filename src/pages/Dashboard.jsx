@@ -47,18 +47,20 @@ export default function Dashboard() {
   };
 
   if (loadingUser) {
-    return <div className="min-h-screen flex items-center justify-center bg-emerald-50">
-      <p className="text-emerald-700">Loading…</p>
-    </div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-emerald-50">
+        <p className="text-emerald-700">Loading…</p>
+      </div>
+    );
   }
-   // If user is still null (e.g. unauthorized), you can redirect or show a message
- if (!user) {
-  return (
-         <div className="min-h-screen flex items-center justify-center bg-emerald-50">
-       <p className="text-red-600">You must log in to view the dashboard.</p>
-     </div>
-   );
- }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-emerald-50">
+        <p className="text-red-600">You must log in to view the dashboard.</p>
+      </div>
+    );
+  }
 
   // only show campaigns created by this user
   const myCamps = campaigns.filter(c => c.createdBy._id === user._id);
@@ -79,21 +81,26 @@ export default function Dashboard() {
             <p className="text-gray-700">Email: {user.email}</p>
 
             {user.isBusiness && user.businessName && (
-            <p className="text-gray-700">
-              Role: <span className="capitalize font-semibold">{user.role}</span>
-            </p>
-            {user.role === "general" && (
-              <button
-                onClick={() => navigate("/dashboard/details")}
-                className="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition"
-              >
-                Convert to Business
-              </button>
-            )}
-            {user.role === "business" && user.businessName && (
-              <p className="text-gray-700 mt-2">
-                Business: <span className="font-semibold">{user.businessName}</span>
-              </p>
+              <>
+                <p className="text-gray-700">
+                  Role: <span className="capitalize font-semibold">{user.role}</span>
+                </p>
+
+                {user.role === "general" && (
+                  <button
+                    onClick={() => navigate("/dashboard/details")}
+                    className="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition"
+                  >
+                    Convert to Business
+                  </button>
+                )}
+
+                {user.role === "business" && (
+                  <p className="text-gray-700 mt-2">
+                    Business: <span className="font-semibold">{user.businessName}</span>
+                  </p>
+                )}
+              </>
             )}
           </section>
 
