@@ -21,7 +21,14 @@ export default function AdminDashboard() {
       .then(res => setPendingBlogs(res.data.blogs || []))
       .catch(() => setPendingBlogs([]));
     API.get("/admin/campaigns/pending", { withCredentials: true })
-      .then(res => setPendingCampaigns(res.data.campaigns || []))
+      .then(res => {
+        const camps =
+          res.data.campaigns ||
+          res.data.pendingCampaigns ||
+          res.data.pending ||
+          [];
+        setPendingCampaigns(camps);
+      })
       .catch(() => setPendingCampaigns([]));
   };
 

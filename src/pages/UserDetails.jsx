@@ -13,12 +13,14 @@ const UserDetails = () => {
   // Editable fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
   const [businessName, setBusinessName] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
   const [businessAbn, setBusinessAbn] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
 
   useEffect(() => {
     API.get("/user/data", { withCredentials: true })
@@ -28,6 +30,7 @@ const UserDetails = () => {
         setName(u.name);
         setEmail(u.email);
         if (u.isBusiness) {
+
           setBusinessName(u.businessName || "");
           setBusinessAddress(u.businessAddress || "");
           setBusinessAbn(u.businessAbn || "");
@@ -36,6 +39,7 @@ const UserDetails = () => {
       .catch(() => toast.error("Failed to load user data"))
       .finally(() => setLoading(false));
   }, []);
+
 
   const handleUpdateDetails = (e) => {
     e.preventDefault();
@@ -60,6 +64,7 @@ const UserDetails = () => {
         setShowPasswordModal(false);
       })
       .catch(() => toast.error("Password update failed"));
+
   };
 
   if (loading) {
@@ -78,7 +83,9 @@ const UserDetails = () => {
         <main className="flex-grow p-6 max-w-3xl mx-auto space-y-6">
           <h1 className="text-2xl font-bold text-emerald-700">Account Settings</h1>
 
+
           <form onSubmit={handleUpdateDetails} className="space-y-4 bg-white p-6 rounded-lg shadow">
+
             <div className="grid gap-4">
               {/* Name & Email */}
               <div>
@@ -101,7 +108,9 @@ const UserDetails = () => {
               </div>
 
               {/* Business Fields */}
+
               {user?.isBusiness && (
+
                 <>
                   <div>
                     <label className="block text-sm font-medium text-emerald-700 mb-1">
