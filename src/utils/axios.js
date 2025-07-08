@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
-  withCredentials: true, // this ensures cookies (JWT) are included
+  baseURL: import.meta.env.EXPRESS_BASE_URL,  // <- use import.meta.env
+  withCredentials: true,
 });
 
 export default API;
