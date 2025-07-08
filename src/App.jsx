@@ -23,7 +23,12 @@ import Resources from "./pages/Resources";
 import ViewCampaign from "./pages/ViewCampaigs";
 import EditCampaign from "./pages/EditCampaign";
 import AdminDashboard from "./pages/AdminDashboard";
-
+import UsersPage from "./pages/admin/UsersPage";
+import ApprovalsPage from "./pages/admin/ApprovalsPage";
+import BlogsPage from "./pages/admin/BlogsPage";
+import CampaignsPage from "./pages/admin/CampaignsPage";
+import ViewBlog from "./pages/ViewBlogs";
+import EditBlog from "./pages/EditBlogs";
 
 const App = () => {
   return (
@@ -40,6 +45,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/campaigns/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditCampaign />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/blog" element={<Blogs />} />
         <Route
           path="/blog/create"
@@ -49,7 +62,15 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/blog/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditBlog />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/blog/:id" element={<ViewBlog />} />
         <Route path="/campaigns/:id" element={<ViewCampaign />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/about" element={<AboutUs />} />
@@ -69,6 +90,39 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        {/* Admin sub-pages */}
+       <Route
+         path="/admin/users"
+         element={
+           <ProtectedRoute>
+             <UsersPage />
+           </ProtectedRoute>
+         }
+       />
+       <Route
+         path="/admin/approvals"
+         element={
+           <ProtectedRoute>
+             <ApprovalsPage />
+           </ProtectedRoute>
+         }
+       />
+       <Route
+         path="/admin/blogs"
+         element={
+           <ProtectedRoute>
+             <BlogsPage />
+           </ProtectedRoute>
+         }
+       />
+       <Route
+         path="/admin/campaigns"
+         element={
+           <ProtectedRoute>
+             <CampaignsPage />
+           </ProtectedRoute>
+         }
+       />
         <Route
           path="/dashboard"
           element={
@@ -85,14 +139,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/campaigns/:id/edit"
-          element={
-            <ProtectedRoute>
-              <EditCampaign />
-            </ProtectedRoute>
-          }
-        />
+        
       </Routes>
       
     </>

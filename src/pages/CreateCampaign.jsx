@@ -53,11 +53,11 @@ const CreateCampaign = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans bg-emerald-10">
       <Navbar />
-      <div className="flex flex-grow">
+      <div className="flex flex-grow bg-emerald-50">
         <DashboardSidebar user={user} />
-        <main className="flex-grow max-w-3xl mx-auto p-6">
+        <main className="flex-grow max-w-3xl mx-auto p-6 ">
           <h2 className="text-2xl font-bold text-emerald-700 mb-6 text-center">Create Campaign</h2>
-          <form className="space-y-6" onSubmit={handleSubmit} encType="multipart/form-data">
+          <form className="space-y-6 p-6 bg-white rounded-lg shadow" onSubmit={handleSubmit} encType="multipart/form-data">
             <div>
               <label className="block text-sm font-medium text-emerald-800 mb-1">Title</label>
               <input

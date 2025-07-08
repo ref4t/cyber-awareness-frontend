@@ -48,7 +48,7 @@ const CreateBlog = () => {
         <DashboardSidebar user={user} />
         <main className="flex-grow max-w-3xl mx-auto p-6">
           <h2 className="text-2xl font-bold text-emerald-700 mb-6 text-center">Create Blog</h2>
-          <form className="space-y-6" onSubmit={handleSubmit} encType="multipart/form-data">
+          <form className="space-y-6 bg-white p-6 shadow" onSubmit={handleSubmit} encType="multipart/form-data">
             <div>
               <label className="block text-sm font-medium text-emerald-800 mb-1">Title</label>
               <input

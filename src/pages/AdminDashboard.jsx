@@ -1,207 +1,147 @@
+// src/pages/admin/AdminDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
-import { Footer } from "../components/Footer";
 import { AdminSidebar } from "../components/admin/AdminSidebar";
+import { Footer } from "../components/Footer";
 import API from "../utils/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  PieChart,
+  Pie,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function AdminDashboard() {
-  const [users, setUsers] = useState([]);
-  const [pendingBlogs, setPendingBlogs] = useState([]);
-  const [pendingCampaigns, setPendingCampaigns] = useState([]);
-  const [newUser, setNewUser] = useState({ name: "", email: "", password: "" });
-  const [roleMap, setRoleMap] = useState({});
-
-  const loadData = () => {
-    API.get("/admin/users", { withCredentials: true })
-      .then(res => setUsers(res.data.users || []))
-      .catch(() => setUsers([]));
-    API.get("/admin/blogs/pending", { withCredentials: true })
-      .then(res => setPendingBlogs(res.data.blogs || []))
-      .catch(() => setPendingBlogs([]));
-    API.get("/admin/campaigns/pending", { withCredentials: true })
-      .then(res => {
-        const camps =
-          res.data.campaigns ||
-          res.data.pendingCampaigns ||
-          res.data.pending ||
-          [];
-        setPendingCampaigns(camps);
-      })
-      .catch(() => setPendingCampaigns([]));
-  };
+  const [usersCount, setUsersCount] = useState(0);
+  const [blogsCount, setBlogsCount] = useState(0);
+  const [campaignsCount, setCampaignsCount] = useState(0);
+  const [resourcesCount, setResourcesCount] = useState(0);
+  const [blogStatusData, setBlogStatusData] = useState([]);
+  const [campaignStatusData, setCampaignStatusData] = useState([]);
 
   useEffect(() => {
-    loadData();
+    // Fetch counts and statuses
+    const fetchStats = async () => {
+      try {
+        const [usersRes, blogsRes, campsRes, resRes] = await Promise.all([
+          API.get("/admin/users", { withCredentials: true }),
+          API.get("/admin/blogs", { withCredentials: true }),
+          API.get("/admin/campaigns", { withCredentials: true }),
+          API.get("/resources", { withCredentials: true }),
+        ]);
+
+        // Users
+        setUsersCount(usersRes.data.users.length);
+
+        // Blogs
+        const blogs = blogsRes.data.blogs;
+        setBlogsCount(blogs.length);
+        const blogActive = blogs.filter(b => b.status === "active" || b.status === "approved").length;
+        const blogPending = blogs.filter(b => b.status === "pending").length;
+        setBlogStatusData([
+          { name: "Active", value: blogActive },
+          { name: "Pending", value: blogPending },
+        ]);
+
+        // Campaigns
+        const camps = campsRes.data.campaigns;
+        setCampaignsCount(camps.length);
+        const campActive = camps.filter(c => c.status === "active").length;
+        const campPending = camps.filter(c => c.status === "pending").length;
+        setCampaignStatusData([
+          { name: "Active", value: campActive },
+          { name: "Pending", value: campPending },
+        ]);
+
+        // Resources
+        setResourcesCount(resRes.data.resources.length);
+      } catch (err) {
+        toast.error("Failed to load admin stats");
+      }
+    };
+
+    fetchStats();
   }, []);
 
-  const handleAddUser = e => {
-    e.preventDefault();
-    API.post("/admin/users", newUser, { withCredentials: true })
-      .then(() => {
-        toast.success("User added");
-        setNewUser({ name: "", email: "", password: "" });
-        loadData();
-      })
-      .catch(() => toast.error("Failed to add user"));
-  };
-
-  const handleDeleteUser = id => {
-    if (!window.confirm("Delete this user?")) return;
-    API.delete(`/admin/users/${id}`, { withCredentials: true })
-      .then(() => {
-        toast.success("User deleted");
-        setUsers(users.filter(u => u._id !== id));
-      })
-      .catch(() => toast.error("Deletion failed"));
-  };
-
-  const handleChangeRole = (id, role) => {
-    API.put(`/admin/users/${id}/role`, { role }, { withCredentials: true })
-      .then(() => {
-        toast.success("Role updated");
-        setRoleMap({ ...roleMap, [id]: "" });
-        loadData();
-      })
-      .catch(() => toast.error("Update failed"));
-  };
-
-  const approveBlog = id => {
-    API.put(`/admin/blogs/${id}/approve`, {}, { withCredentials: true })
-      .then(() => {
-        toast.success("Blog approved");
-        setPendingBlogs(pendingBlogs.filter(b => b._id !== id));
-      })
-      .catch(() => toast.error("Approval failed"));
-  };
-
-  const approveCampaign = id => {
-    API.put(`/admin/campaigns/${id}/approve`, {}, { withCredentials: true })
-      .then(() => {
-        toast.success("Campaign approved");
-        setPendingCampaigns(pendingCampaigns.filter(c => c._id !== id));
-      })
-      .catch(() => toast.error("Approval failed"));
-  };
+  const cardClasses = "bg-white rounded-lg shadow p-6 flex-1";
 
   return (
-    <div className="min-h-screen flex flex-col bg-emerald-50 text-gray-800 font-sans">
+    <div className="min-h-screen flex flex-col bg-emerald-50 text-gray-800">
       <Navbar />
       <div className="flex flex-grow">
         <AdminSidebar />
-        <main className="flex-grow p-6 space-y-8 max-w-5xl mx-auto">
-          <section className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4 text-emerald-700">Add User</h2>
-            <form onSubmit={handleAddUser} className="grid gap-4 md:grid-cols-3">
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Name"
-                value={newUser.name}
-                onChange={e => setNewUser({ ...newUser, name: e.target.value })}
-                required
-              />
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Email"
-                type="email"
-                value={newUser.email}
-                onChange={e => setNewUser({ ...newUser, email: e.target.value })}
-                required
-              />
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Password"
-                type="password"
-                value={newUser.password}
-                onChange={e => setNewUser({ ...newUser, password: e.target.value })}
-                required
-              />
-              <button type="submit" className="bg-emerald-600 text-white rounded px-4 py-2 md:col-span-3">
-                Add User
-              </button>
-            </form>
-          </section>
 
-          <section className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4 text-emerald-700">Users</h2>
-            <div className="space-y-4">
-              {users.map(u => (
-                <div key={u._id} className="flex flex-col md:flex-row items-center justify-between border p-4 rounded">
-                  <div className="flex-1">
-                    <p className="font-medium">{u.name} ({u.email})</p>
-                    <p className="text-sm text-gray-600">Role: {u.role}</p>
-                  </div>
-                  <div className="flex items-center space-x-2 mt-2 md:mt-0">
-                    <select
-                      value={roleMap[u._id] || u.role}
-                      onChange={e => setRoleMap({ ...roleMap, [u._id]: e.target.value })}
-                      className="border rounded px-2 py-1"
-                    >
-                      <option value="user">User</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                    <button
-                      onClick={() => handleChangeRole(u._id, roleMap[u._id] || u.role)}
-                      className="px-3 py-1 bg-blue-600 text-white rounded"
-                    >
-                      Change
-                    </button>
-                    <button
-                      onClick={() => handleDeleteUser(u._id)}
-                      className="px-3 py-1 bg-red-600 text-white rounded"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+        <main className="flex-grow p-8">
+          <h1 className="text-3xl font-bold text-emerald-700 mb-6">
+            Admin Dashboard Stats
+          </h1>
+
+          {/* Top stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div className={cardClasses}>
+              <p className="text-gray-600">Total Users</p>
+              <p className="text-4xl font-semibold mt-2">{usersCount}</p>
             </div>
-          </section>
+            <div className={cardClasses}>
+              <p className="text-gray-600">Total Blogs</p>
+              <p className="text-4xl font-semibold mt-2">{blogsCount}</p>
+            </div>
+            <div className={cardClasses}>
+              <p className="text-gray-600">Total Campaigns</p>
+              <p className="text-4xl font-semibold mt-2">{campaignsCount}</p>
+            </div>
+            <div className={cardClasses}>
+              <p className="text-gray-600">Total Resources</p>
+              <p className="text-4xl font-semibold mt-2">{resourcesCount}</p>
+            </div>
+          </div>
 
-          <section className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4 text-emerald-700">Pending Blogs</h2>
-            {pendingBlogs.length === 0 ? (
-              <p className="text-gray-600">No blogs awaiting approval.</p>
-            ) : (
-              <div className="space-y-4">
-                {pendingBlogs.map(b => (
-                  <div key={b._id} className="flex items-center justify-between border p-4 rounded">
-                    <p className="flex-1 font-medium">{b.title}</p>
-                    <button
-                      onClick={() => approveBlog(b._id)}
-                      className="px-3 py-1 bg-emerald-600 text-white rounded"
-                    >
-                      Approve
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
+          {/* Charts */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-bold text-emerald-700 mb-4">
+                Blog Status Breakdown
+              </h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={blogStatusData}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius={80}
+                    label
+                  />
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
 
-          <section className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4 text-emerald-700">Pending Campaigns</h2>
-            {pendingCampaigns.length === 0 ? (
-              <p className="text-gray-600">No campaigns awaiting approval.</p>
-            ) : (
-              <div className="space-y-4">
-                {pendingCampaigns.map(c => (
-                  <div key={c._id} className="flex items-center justify-between border p-4 rounded">
-                    <p className="flex-1 font-medium">{c.title}</p>
-                    <button
-                      onClick={() => approveCampaign(c._id)}
-                      className="px-3 py-1 bg-emerald-600 text-white rounded"
-                    >
-                      Approve
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-bold text-emerald-700 mb-4">
+                Campaign Status Breakdown
+              </h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={campaignStatusData}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius={80}
+                    label
+                  />
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </main>
       </div>
+
       <Footer />
       <ToastContainer position="bottom-right" theme="light" />
     </div>
