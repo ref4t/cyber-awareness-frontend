@@ -4,10 +4,13 @@ import { Footer } from "../components/Footer";
 import { DashboardSidebar } from "../components/dashboard/DashboardSidebar";
 import API from "../utils/axios";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export const UserDetails = () => {
+const UserDetails = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Editable fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [businessName, setBusinessName] = useState("");
@@ -18,17 +21,19 @@ export const UserDetails = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   useEffect(() => {
-    API.get("/user/data")
+    API.get("/user/data", { withCredentials: true })
       .then((res) => {
         const u = res.data.user;
         setUser(u);
         setName(u.name);
         setEmail(u.email);
-        setBusinessName(u.businessName || "");
-        setBusinessAddress(u.businessAddress || "");
-        setBusinessAbn(u.businessAbn || "");
+        if (u.isBusiness) {
+          setBusinessName(u.businessName || "");
+          setBusinessAddress(u.businessAddress || "");
+          setBusinessAbn(u.businessAbn || "");
+        }
       })
-      .catch(() => setUser(null))
+      .catch(() => toast.error("Failed to load user data"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -57,73 +62,96 @@ export const UserDetails = () => {
       .catch(() => toast.error("Password update failed"));
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col font-sans text-gray-800">
+    <div className="min-h-screen flex flex-col bg-emerald-50 font-sans text-gray-800">
       <Navbar />
       <div className="flex flex-grow">
         <DashboardSidebar user={user} />
-        <main className="flex-grow p-6 space-y-6">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <>
-              <form onSubmit={handleUpdateDetails} className="space-y-4 max-w-md">
-                <h2 className="text-xl font-semibold">Edit Details</h2>
+        <main className="flex-grow p-6 max-w-3xl mx-auto space-y-6">
+          <h1 className="text-2xl font-bold text-emerald-700">Account Settings</h1>
+
+          <form onSubmit={handleUpdateDetails} className="space-y-4 bg-white p-6 rounded-lg shadow">
+            <div className="grid gap-4">
+              {/* Name & Email */}
+              <div>
+                <label className="block text-sm font-medium text-emerald-700 mb-1">Name</label>
                 <input
                   type="text"
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Name"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-emerald-700 mb-1">Email</label>
                 <input
                   type="email"
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
                 />
-                {user?.isBusiness && (
-                  <>
+              </div>
+
+              {/* Business Fields */}
+              {user?.isBusiness && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-emerald-700 mb-1">
+                      Business Name
+                    </label>
                     <input
                       type="text"
-                      className="w-full border px-3 py-2 rounded"
+                      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
                       value={businessName}
                       onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="Business Name"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-emerald-700 mb-1">
+                      Business Address
+                    </label>
                     <input
                       type="text"
-                      className="w-full border px-3 py-2 rounded"
+                      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
                       value={businessAddress}
                       onChange={(e) => setBusinessAddress(e.target.value)}
-                      placeholder="Business Address"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-emerald-700 mb-1">ABN</label>
                     <input
                       type="text"
-                      className="w-full border px-3 py-2 rounded"
+                      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-emerald-400"
                       value={businessAbn}
                       onChange={(e) => setBusinessAbn(e.target.value)}
-                      placeholder="ABN"
                     />
-                  </>
-                )}
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-emerald-600 text-white rounded"
-                >
-                  Save Changes
-                </button>
-              </form>
-              <button
-                type="button"
-                onClick={() => setShowPasswordModal(true)}
-                className="px-4 py-2 bg-emerald-600 text-white rounded"
-              >
-                Change Password
-              </button>
-            </>
-          )}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-emerald-600 text-white rounded"
+            >
+              Save Changes
+            </button>
+          </form>
+          <button
+            type="button"
+            onClick={() => setShowPasswordModal(true)}
+            className="px-4 py-2 bg-emerald-600 text-white rounded"
+          >
+            Change Password
+          </button>
         </main>
       </div>
       {showPasswordModal && (
@@ -153,10 +181,7 @@ export const UserDetails = () => {
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-emerald-600 text-white rounded"
-                >
+                <button type="submit" className="px-4 py-2 bg-emerald-600 text-white rounded">
                   Update
                 </button>
               </div>
@@ -164,8 +189,11 @@ export const UserDetails = () => {
           </div>
         </div>
       )}
-      <ToastContainer position="bottom-right" theme="light" />
+
       <Footer />
+      <ToastContainer position="bottom-right" theme="light" />
     </div>
   );
 };
+
+export default UserDetails;

@@ -9,15 +9,20 @@ import { VerifyOtp } from "./components/auth/VerifyOtp";
 import { ResetPassword } from "./components/auth/ResetPassword";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Logout } from "./components/auth/logout";
-import { Dashboard } from "./pages/Dashboard";
-import { UserDetails } from "./pages/UserDetails";
+import  Dashboard from "./pages/Dashboard";
+import UserDetails from "./pages/UserDetails";
 import Blogs from "./pages/Blogs";
+import CreateBlog from "./pages/CreateBlog";
 import Campaigns from "./pages/Campaigns";
 import CreateCampaign from "./pages/CreateCampaign";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import Terms from "./pages/Terms";
 import ScrollToTop from "./components/ScrollToTop";
+import Resources from "./pages/Resources";
+import ViewCampaign from "./pages/ViewCampaigs";
+import EditCampaign from "./pages/EditCampaign";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   return (
@@ -35,6 +40,16 @@ const App = () => {
           }
         />
         <Route path="/blog" element={<Blogs />} />
+        <Route
+          path="/blog/create"
+          element={
+            <ProtectedRoute>
+              <CreateBlog />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/campaigns/:id" element={<ViewCampaign />} />
+        <Route path="/resources" element={<Resources />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/terms" element={<Terms />} />
@@ -44,6 +59,14 @@ const App = () => {
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/logout" element={<Logout />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
@@ -60,7 +83,16 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/campaigns/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditCampaign />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+      
     </>
   );
 };
