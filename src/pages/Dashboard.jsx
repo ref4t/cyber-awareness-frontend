@@ -22,6 +22,7 @@ export default function Dashboard() {
     active: "bg-green-100 text-green-800",
     pending: "bg-yellow-100 text-yellow-800",
     archived: "bg-gray-200 text-gray-600",
+    featured:"bg-purple-200 text-purple-800",
   };
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function Dashboard() {
   const handleDeleteCampaign = async id => {
     if (!window.confirm("Are you sure?")) return;
     try {
-      await API.delete(`/api/campaigns/${id}`, { withCredentials: true });
+      await API.delete(`/campaigns/${id}`, { withCredentials: true });
       setCampaigns(c => c.filter(x => x._id !== id));
       toast.success("Campaign deleted");
     } catch {
@@ -55,7 +56,7 @@ export default function Dashboard() {
   const handleDeleteBlog = async id => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      await API.delete(`/api/blogs/${id}`, { withCredentials: true });
+      await API.delete(`/blogs/${id}`, { withCredentials: true });
       setBlogs(b => b.filter(x => x._id !== id));
       toast.success("Blog deleted");
     } catch {

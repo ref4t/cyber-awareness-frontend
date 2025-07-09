@@ -1,5 +1,6 @@
 import React from "react";
 import { ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const CTABanner = () => (
   <section className="py-16 px-6 bg-emerald-600 text-white text-center bg-gradient-to-br from-emerald-600 to-emerald-500">
@@ -11,9 +12,9 @@ export const CTABanner = () => (
       <p className="text-white/90 mb-6 text-sm md:text-base">
         Join CyberShield and help build a safer online future—for yourself and your community.
       </p>
-      <button className="bg-white text-emerald-700 hover:bg-emerald-100 px-6 py-3 rounded-md font-semibold shadow transition">
+      <Link to="signup" className="bg-white text-emerald-700 hover:bg-emerald-100 px-6 py-3 rounded-md font-semibold shadow transition">
         Join CyberShield Today
-      </button>
+      </Link>
     </div>
 
     {/* Optional background glow effect */}
