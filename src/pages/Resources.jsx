@@ -52,10 +52,10 @@ export default function Resources() {
       </header>
 
       {/* Controls */}
-      <section className="max-w-6xl mx-auto px-6 py-8">
+      <section className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           {/* Search */}
-          <div className="relative w-full md:w-1/2">
+          <div className="relative w-full md:w-1/4">
             <Search className="absolute left-3 top-3 text-emerald-400" size={20} />
             <input
               type="text"
@@ -100,7 +100,7 @@ export default function Resources() {
               >
                 <div className="h-40 bg-gray-100 overflow-hidden">
                   <img
-                    src={res.image}
+                    src={res.image?`${import.meta.env.VITE_EXPRESS_BASE_URL}${camp.imageUrl}`: "/images/def-resources.jpg"}
                     alt={res.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />

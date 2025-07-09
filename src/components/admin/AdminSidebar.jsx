@@ -9,6 +9,7 @@ export const AdminSidebar = () => {
     { label: "Approvals", to: "/admin/approvals" },
     { label: "Blogs", to: "/admin/blogs" },
     { label: "Campaigns", to: "/admin/campaigns" },
+    { label: "Resources", to: "/admin/resources" },
   ];
 
   return (

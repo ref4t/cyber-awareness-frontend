@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://cybersecurityawareness.onrender.com/api",  // <- use import.meta.env
+  baseURL: import.meta.env.VITE_EXPRESS_BASE_URL+"/api",
   withCredentials: true,
 });
 

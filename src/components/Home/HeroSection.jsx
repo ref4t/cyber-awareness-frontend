@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const HeroSection = () => (
   <section
@@ -14,12 +15,12 @@ export const HeroSection = () => (
         An all-in-one hub for cybersecurity awareness, support, and campaign promotion.
       </p>
       <div className="flex flex-col md:flex-row justify-center items-center gap-4">
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-3 rounded shadow">
+        <Link to="/resources" className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-3 rounded shadow">
           Explore Resources
-        </button>
-        <button className="bg-white text-emerald-700 border border-emerald-600 hover:bg-emerald-50 font-medium px-6 py-3 rounded shadow">
+        </Link>
+        <Link to="/campaigns/create" className="bg-white text-emerald-700 border border-emerald-600 hover:bg-emerald-50 font-medium px-6 py-3 rounded shadow">
           Start a Campaign
-        </button>
+        </Link>
       </div>
     </div>
   </section>

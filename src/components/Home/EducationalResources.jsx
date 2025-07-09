@@ -33,7 +33,7 @@ export const EducationalResources = () => {
         {resources.map((res, idx) => (
           <Link
             key={idx}
-            to={`/resources/${res.slug}`}
+            to={`/resources/`}
             className="bg-white p-6 rounded-lg shadow hover:shadow-md transition duration-300 block group"
           >
             <div className="mb-4">{res.icon}</div>

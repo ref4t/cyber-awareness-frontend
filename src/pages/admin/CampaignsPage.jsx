@@ -1,4 +1,3 @@
-// src/pages/admin/CampaignsPage.jsx
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { AdminSidebar } from "../../components/admin/AdminSidebar";
@@ -13,7 +12,7 @@ export default function CampaignsPage() {
 
   const loadCampaigns = () => {
     API.get("/campaigns", { withCredentials: true })
-      .then(res => setCampaigns(res.data.campaigns || []))
+      .then((res) => setCampaigns(res.data.campaigns || []))
       .catch(() => setCampaigns([]));
   };
 
@@ -29,10 +28,23 @@ export default function CampaignsPage() {
     )
       .then(() => {
         toast.success("Campaign status updated");
-        setStatusMap(prev => ({ ...prev, [id]: "" }));
+        setStatusMap((prev) => ({ ...prev, [id]: "" }));
         loadCampaigns();
       })
       .catch(() => toast.error("Failed to update status"));
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to delete this campaign?");
+    if (!confirm) return;
+
+    try {
+      await API.delete(`/campaigns/${id}`, { withCredentials: true });
+      toast.success("Campaign deleted");
+      loadCampaigns();
+    } catch (err) {
+      toast.error("Failed to delete campaign");
+    }
   };
 
   return (
@@ -41,41 +53,61 @@ export default function CampaignsPage() {
       <div className="flex flex-grow">
         <AdminSidebar />
 
-        <main className="flex-grow p-6 max-w-5xl mx-auto space-y-8">
-          <h2 className="text-2xl font-bold text-emerald-700">All Campaigns</h2>
-          <div className="space-y-4">
-            {campaigns.map(c => (
-              <div
-                key={c._id}
-                className="flex items-center justify-between border p-4 rounded"
-              >
-                <div className="flex-1">
-                  <p className="font-medium">{c.title}</p>
-                  <p className="text-sm text-gray-600">
-                    Created by: {c.createdBy?.name || 'Unknown'}
-                  </p>
+        <main className="flex-grow p-6 max-w-6xl mx-auto space-y-8">
+          <h2 className="text-3xl font-bold text-emerald-700 mb-6">Manage Campaigns</h2>
+
+          <div className="bg-white rounded-lg shadow p-6 space-y-4">
+            {campaigns.length === 0 ? (
+              <p className="text-center text-gray-500">No campaigns found.</p>
+            ) : (
+              campaigns.map((c) => (
+                <div
+                  key={c._id}
+                  className="border rounded p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                >
+                  <div className="flex-1">
+                    <p className="text-lg font-semibold text-emerald-800">{c.title}</p>
+                    <p className="text-sm text-gray-600">
+                      Created by: {c.createdBy?.name || "Unknown"}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 md:justify-end">
+                    <select
+                      value={statusMap[c._id] || c.status}
+                      onChange={(e) =>
+                        setStatusMap((prev) => ({
+                          ...prev,
+                          [c._id]: e.target.value,
+                        }))
+                      }
+                      className="border rounded px-3 py-1 text-sm"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="active">Active</option>
+                      <option value="featured">Featured</option>
+                      <option value="archived">Archived</option>
+                    </select>
+
+                    <button
+                      onClick={() =>
+                        handleChangeStatus(c._id, statusMap[c._id] || c.status)
+                      }
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1 rounded text-sm font-medium"
+                    >
+                      Update
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(c._id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded text-sm font-medium"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-
-                <select
-                  value={statusMap[c._id] || c.status}
-                  onChange={e =>
-                    setStatusMap(prev => ({ ...prev, [c._id]: e.target.value }))
-                  }
-                  className="border rounded px-2 py-1 mr-2"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="active">Active</option>
-                  <option value="archived">Archived</option>
-                </select>
-
-                <button
-                  onClick={() => handleChangeStatus(c._id, statusMap[c._id] || c.status)}
-                  className="px-3 py-1 bg-emerald-600 text-white rounded"
-                >
-                  Update
-                </button>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </main>
       </div>
