@@ -100,7 +100,7 @@ export default function Resources() {
               >
                 <div className="h-40 bg-gray-100 overflow-hidden">
                   <img
-                    src={res.image}
+                    src={res.image?`${import.meta.env.VITE_EXPRESS_BASE_URL}${camp.imageUrl}`: "/images/def-resources.jpg"}
                     alt={res.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />

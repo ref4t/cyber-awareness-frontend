@@ -46,7 +46,7 @@ export default function Blogs() {
                 {blog.imageUrl && (
                   <img
                     src={
-                          blog.imageUrl? `${import.meta.env.VITE_EXPRESS_BASE_URL}${blog.imageUrl}`: "/images/default-blog.png"
+                          blog.imageUrl? `${import.meta.env.VITE_EXPRESS_BASE_URL}${blog.imageUrl}`: "/images/default_blog.png"
                         }
                     alt={blog.title}
                     className="w-full h-48 object-cover"
