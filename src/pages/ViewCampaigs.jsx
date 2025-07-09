@@ -59,7 +59,7 @@ export default function ViewCampaign() {
           {campaign.imageUrl && (
             <div className="h-64 md:h-96 overflow-hidden">
               <img
-                src={campaign.imageUrl}
+                src={campaign.imageUrl?`${import.meta.env.VITE_EXPRESS_BASE_URL}${campaign.imageUrl}`: "/images/def-camp.png"}
                 alt={campaign.title}
                 className="w-full h-full object-cover"
               />
