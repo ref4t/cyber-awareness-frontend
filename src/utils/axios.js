@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.EXPRESS_BASE_URL,  // <- use import.meta.env
+  baseURL: import.meta.env.VITE_EXPRESS_BASE_URL,
   withCredentials: true,
 });
 
