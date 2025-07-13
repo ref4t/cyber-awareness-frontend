@@ -17,7 +17,7 @@ export const Login = () => {
     try {
       await API.post("/auth/login", { email, password }, { withCredentials: true });
       toast.success("Login successful");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     }
