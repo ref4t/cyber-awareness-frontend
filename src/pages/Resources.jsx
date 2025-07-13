@@ -48,7 +48,7 @@ export default function Resources() {
   const filtered = resources
     .filter(r => filter === "All" || r.category === filter)
     .filter(r => r.title.toLowerCase().includes(search.toLowerCase()));
-
+  
   return (
     <div className="min-h-screen flex flex-col bg-emerald-50 text-gray-800">
       <Navbar />
@@ -110,7 +110,7 @@ export default function Resources() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map(res => (
               <Link
-                key={res.id}
+                key={res._id || res.id}
                 to={res.link}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -118,15 +118,15 @@ export default function Resources() {
               >
                 <div className="h-40 bg-gray-100 overflow-hidden">
                   <img
-                    src={
-                      res.image
-                        ? `${import.meta.env.VITE_EXPRESS_BASE_URL || ""}${res.image}`
-                        : "/images/def-resources.jpg"
-                    }
-                    alt={res.title}
-                    onError={(e) => (e.target.src = "/images/def-resources.jpg")}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                      src={
+                        res.imageUrl?.startsWith("/uploads/")
+                          ? `${import.meta.env.VITE_EXPRESS_BASE_URL}${res.imageUrl}`
+                          : res.imageUrl || "/images/def-resources.jpg"
+                      }
+                      alt={res.title}
+                      onError={(e) => (e.target.src = "/images/def-resources.jpg")}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                 </div>
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-emerald-700 mb-1">
